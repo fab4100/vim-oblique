@@ -122,7 +122,7 @@ endfunction
 
 function! s:unfold()
   if foldclosed('.') != -1
-    normal! zo
+    normal! zO
   endif
 endfunction
 
