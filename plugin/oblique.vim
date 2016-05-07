@@ -318,7 +318,7 @@ function! s:on_win_enter()
     autocmd CursorMoved * if exists('b:_oblique_pos')
                        \|   call s:on_cursor_moved(0)
                        \| else
-                       \|   set nohlsearch
+                       \|   set hlsearch
                        \| endif
                        \| augroup ObliqueExtra
                        \|   execute 'autocmd!'
@@ -341,7 +341,7 @@ endfunction
 
 function! s:on_cursor_moved(force)
   if a:force || !exists('b:_oblique_pos') || line('.') != b:_oblique_pos[0] || col('.') != b:_oblique_pos[1]
-    set nohlsearch " function-search-undo
+    set hlsearch " function-search-undo
     call s:clear()
     return 1
   else
