@@ -54,6 +54,8 @@ let s:fuzzy     = 0
 let s:matching  = ''
 let s:prev      = ''
 
+let w:prev_foldsline = -1
+
 function! s:optval(key)
   return get(g:, 'oblique#'.a:key, s:DEFAULT[a:key])
 endfunction
@@ -120,10 +122,23 @@ function! s:revert_showcmd()
   endif
 endfunction
 
+function! s:upfold()
+    " close previously opened folds by me (if cursor did not move)
+    if w:prev_foldsline != -1
+        let l = line('.')
+        let c = col('.')
+        call cursor(w:prev_foldsline,0)
+        normal! zC
+        call cursor(l,c)
+    endif
+endfunction
+
 function! s:unfold()
-  if foldclosed('.') != -1
-    normal! zO
-  endif
+    let w:prev_foldsline = foldclosed('.')
+    if w:prev_foldsline != -1
+        normal! zv
+        " execute 'normal! ' . foldlevel('.') . 'za'
+    endif
 endfunction
 
 function! s:strip_extra(pat)
@@ -142,6 +157,7 @@ function! s:finish()
     call winrestview(s:view)
     execute s:move(s:backward)
     call s:echo_pattern('n')
+    " call s:upfold()
     call s:unfold()
     call s:set_autocmd()
     call s:highlight_current_match()
@@ -343,6 +359,7 @@ function! s:on_cursor_moved(force)
   if a:force || !exists('b:_oblique_pos') || line('.') != b:_oblique_pos[0] || col('.') != b:_oblique_pos[1]
     set hlsearch " function-search-undo
     call s:clear()
+    let w:prev_foldsline = -1 " forget previously opened folds
     return 1
   else
     return 0
@@ -401,6 +418,7 @@ function! s:next(n, cnt, gv)
   try
     execute 'normal! '.a:cnt.a:n
     call s:highlight_current_match()
+    " call s:upfold()
     call s:unfold()
     call s:set_autocmd()
     call s:echo_pattern(a:n)
