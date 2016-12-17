@@ -1,6 +1,11 @@
 vim-oblique ![travis-ci](https://travis-ci.org/junegunn/vim-oblique.svg?branch=master)
 ===========
 
+*Disclaimer: this plugin has many issues that cannot be easily fixed.
+I suggest that you try simpler alternatives like
+[vim-evanesco](https://github.com/pgdouyon/vim-evanesco) or
+[vim-slash](https://github.com/junegunn/vim-slash).*
+
 Improved `/`-search for Vim.
 
 - Different highlight for the match under the cursor
